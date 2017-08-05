@@ -1,0 +1,30 @@
+gcc main.c -I./inc -I./libft/inc -L./libft/ -lft  -o server
+
+
+
+options {
+               directory "/var/named";
+               listen-on { 192.168.6.1; localhost; };
+               version "Go away!";
+               allow-transfer { none; };
+               allow-query { 192.168.6.0/24; localhost; };
+               forward first;
+               forwarders { 192.168.1.1; };
+           };
+
+           zone "localhost" in {
+               type master;
+               file "/var/named/localhost.zone";
+               allow-update { none; };
+           };
+
+           zone "0.0.127.in-addr.arpa" in {
+               type master;
+               file "/var/named/127.0.0.zone";
+               allow-update { none; };
+           };
+
+           zone "." in {
+               type hint;
+               file "/var/named/root.hint";
+           };

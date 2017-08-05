@@ -1,0 +1,10 @@
+*.o
+*.a
+.DS_Store
+*.exe
+*.out
+.nfs.*
+lem-in.dSYM
+._*
+*.cor
+asm_test
