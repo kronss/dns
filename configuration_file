@@ -1,0 +1,17 @@
+# configuration file
+# #  - coment
+# ## - control char
+
+
+
+## black_list:
+*.google.com
+*.google.com
+*.google.com
+*.vk.com
+
+
+## wall
+amazon.com
+
+## server-adress
