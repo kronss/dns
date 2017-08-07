@@ -49,6 +49,16 @@ void			read_black_list(t_host_name **head, int fd)
 		err_msg(line);
 }
 
+void			read_wall(uint *wall_ip, int fd)
+{
+	
+
+
+}
+
+
+
+
 void			read_conf_file(t_data *data, int fd)
 {
 	char		*line;
@@ -60,10 +70,7 @@ void			read_conf_file(t_data *data, int fd)
 		if (!ft_strncmp(line, "## black_list:", 14))
 			read_black_list(&data->head, fd);
 		if (!ft_strncmp(line, "## wall", 7))
-		{
-			;
-			// check_line(data, &line, fd);
-		}
+			read_wall(data->wall_ip, fd);
 		else
 		;
 		printf("%s\n", line); // verbose

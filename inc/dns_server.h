@@ -31,7 +31,8 @@ typedef struct			s_host_name
 
 typedef struct			s_data
 {
-	
+	uint				wall_ip;
+		
 
 	struct s_host_name	*head;
 }						t_data;
