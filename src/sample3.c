@@ -81,8 +81,18 @@
 
 #include <netdb.h>
 #include <sys/socket.h>
+// #include <sys/types.h> 
+
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
+#include <netinet/in.h>
+
+ #include <unistd.h>
+#include <errno.h>
+
+
 
 void    error(char *err_msg)
 {
@@ -101,48 +111,71 @@ void    error(char *err_msg)
 int     main(int ar, char **av)
 {
     int					sd;
+    int check;
     struct protoent		proto;
-
-
-	struct sockaddr_in	sa; 
-	char				buffer[1024];
-	
-
-	ssize_t recsize;
-	
-
+	struct sockaddr_in	sa;
 	socklen_t fromlen;
 
-	
-	// memset(&sa, 0, sizeof sa);
-	// sa.sin_family = AF_INET;
-	// sa.sin_addr.s_addr = htonl(INADDR_ANY);
-	// sa.sin_port = htons(7654);
-	// fromlen = sizeof sa;
-
-
-
+	char buffer[1024];
+	ssize_t recsize;
 
 
 
 	proto = *getprotobyname("UDP");
-	sd = socket( PF_INET, SOCK_DGRAM, proto.p_proto);
+	sd = socket( PF_INET, SOCK_DGRAM, proto.p_proto );
 	if (sd == -1)
 		error("can not create socket");
 
-	bind ()
+	bzero(&sa, sizeof(sa));
+	
+	sa.sin_family = AF_INET;
+	sa.sin_addr.s_addr = htonl(INADDR_ANY);
+	sa.sin_port = htons(7654);
+	fromlen = sizeof(sa);
+
+	// printf("INADDR_ANY %d\n", INADDR_ANY);
+	check = bind(sd, (struct sockaddr *)&sa, sizeof sa);
+	if (check == -1)
+	{
+		perror("error bind failed");
+		close(sd);
+		exit(EXIT_FAILURE);
+	}	
+	printf("confirm: port #%d opened", sa.sin_port);
 
 
+	for ( ; ; )
+	{
+		recsize = recvfrom(sd, (void*)buffer, sizeof buffer, 0, (struct sockaddr*)&sa, &fromlen);
+		if (recsize < 0)
+		{
+			fprintf(stderr, "%s\n", strerror(errno));
+			exit(EXIT_FAILURE);
+    	}
+		printf("recsize: %d\n ", (int)recsize);
+		sleep(1);
+		printf("datagram: %.*s\n", (int)recsize, buffer);
+	}
 
-
-/*********************************************verbose*******************************/
+	/*********************************************** verbose *******************************************************/
+	printf("\n--------------------------------------------------------\n");
 	printf("socket desriptor %d\n", sd);
-	// printf("%s\n", socklen_t);
+
+
+	printf("\n--------------------------------------------------------\n");
 	printf("официальное имя протокола %s\n", proto.p_name);
 	printf("список псевдонимов        %s\n", (proto.p_aliases)[0]);
 	printf("список псевдонимов        %s\n", (proto.p_aliases)[1]);
 	printf("номер протокола           %d\n", proto.p_proto);
 	printf("IPPROTO_UDP               %d\n", IPPROTO_UDP);
+
+
+	
+	printf("\n--------------------------------------------------------\n");
+	printf("sizeof = %zu\n", sizeof(sa));
+	printf(".sin_family             %d sizeof(sa.sin_family) %zu\n", sa.sin_family, sizeof(sa.sin_family));
+	printf(".sin_port               %d sizeof(sa.sin_port) %zu\n", sa.sin_port, sizeof(sa.sin_port));
+	printf(".sin_addr.s_addr        %d sizeof(sa.sin_addr) %zu\n", sa.sin_addr.s_addr, sizeof(sa.sin_addr.s_addr));
     return (0);
 }
 
