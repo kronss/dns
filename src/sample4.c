@@ -15,7 +15,7 @@ int main(void)
   int bytes_sent;
   char buffer[200];
  
-  strcpy(buffer, "hello world!");
+  strcpy(buffer, "\nхуй\n");
  
   /* create an Internet, datagram, socket using UDP */
   sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -32,7 +32,9 @@ int main(void)
   sa.sin_family = AF_INET;
  
    /* IPv4 adresses is a uint32_t, convert a string representation of the octets to the appropriate value */
-  sa.sin_addr.s_addr = inet_addr("127.0.0.1");
+  
+  sa.sin_addr.s_addr = inet_addr("10.113.9.2");
+  // sa.sin_addr.s_addr = inet_addr("127.0.0.1");
   
   /* sockets are unsigned shorts, htons(x) ensures x is in network byte order, set the port to 7654 */
   sa.sin_port = htons(7654);

@@ -116,8 +116,10 @@ int     main(int ar, char **av)
 	struct sockaddr_in	sa;
 	socklen_t fromlen;
 
-	char buffer[1024];
+	char	buffer[1024];
 	ssize_t recsize;
+
+
 
 
 
@@ -127,6 +129,7 @@ int     main(int ar, char **av)
 		error("can not create socket");
 
 	bzero(&sa, sizeof(sa));
+
 	
 	sa.sin_family = AF_INET;
 	sa.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -141,8 +144,11 @@ int     main(int ar, char **av)
 		close(sd);
 		exit(EXIT_FAILURE);
 	}	
-	printf("confirm: port #%d opened", sa.sin_port);
+	
 
+	printf("PF_INET ====== %d\n", PF_INET);
+
+	printf("SOCK_DGRAM === %d\n", SOCK_DGRAM);
 
 	for ( ; ; )
 	{
@@ -151,7 +157,7 @@ int     main(int ar, char **av)
 		{
 			fprintf(stderr, "%s\n", strerror(errno));
 			exit(EXIT_FAILURE);
-    	}
+		}
 		printf("recsize: %d\n ", (int)recsize);
 		sleep(1);
 		printf("datagram: %.*s\n", (int)recsize, buffer);
