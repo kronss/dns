@@ -5,6 +5,9 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
+
+#include <arpa/inet.h>  
+
 #include <unistd.h>
 
 #define BUFF_SIZE 1500
@@ -89,7 +92,8 @@ int					main(int argc, char const *argv[])
 	int							sock;
 	int							recive_size;
 	char						buffer[BUFF_SIZE];
-	struct sockaddr_storage		client_adress;
+	struct sockaddr_in			client_adress;
+	struct sockaddr_in			server_adress;
 	socklen_t 					clnt_adrs_len;
 
 	sock = create_server();
@@ -100,6 +104,11 @@ int					main(int argc, char const *argv[])
 
 	int i;
 
+	printf("-----------------------------------------------------------------------\n");
+
+	char qwerty[20];
+	bzero (&qwerty, sizeof(qwerty));
+
 	while (1)
 	{
 		bzero(&buffer, sizeof(buffer));
@@ -108,28 +117,37 @@ int					main(int argc, char const *argv[])
 		{
 			error("recvfrom() failed");
 		}
+
+			printf("recive_size == %d\n", recive_size);
+			printf("datagram: %.*s\n", (int)recive_size, buffer);
 		
 		i = 0;
 
-		while (i < clnt_adrs_len)
+
+		printf("clnt_adrs_len == %d\n", clnt_adrs_len);
+		printf("recive_size == %d\n", recive_size);
+
+		while (i < recive_size)
 		{
-			printf("[%2d] ", buffer[i]);
+			printf("%d = [%c][%d] ", i, buffer[i], buffer[i]);
+			++i;
+			
+
 			if (i % 16 == 0)
 				printf("\n");
-			++i;
+			
 		}
+		printf("\n");
+
+
 		
 
 
-		printf("%d\n", recive_size);
-		printf("datagram: %.*s\n", (int)recive_size, buffer);
 
+		// strcpy(qwerty, );
+		printf("IP   == %s\n", inet_ntoa(client_adress.sin_addr));
 
-
-
-
-
-
+		printf("PORT == %d\n", client_adress.sin_port);
 
 		// if(decode_msg(&msg, buffer, recive_size) != 0)
 		// {
