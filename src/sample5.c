@@ -7,11 +7,33 @@
 
 #include <unistd.h>
 
-
-
-
-
 #define BUFF_SIZE 1500
+
+//DNS header structure
+struct DNS_HEADER
+{
+    unsigned short id; // identification number
+ 
+    unsigned char rd :1; // recursion desired
+    unsigned char tc :1; // truncated message
+    unsigned char aa :1; // authoritive answer
+    unsigned char opcode :4; // purpose of message
+    unsigned char qr :1; // query/response flag
+ 
+    unsigned char rcode :4; // response code
+    unsigned char cd :1; // checking disabled
+    unsigned char ad :1; // authenticated data
+    unsigned char z :1; // its z! reserved
+    unsigned char ra :1; // recursion available
+ 
+    unsigned short q_count; // number of question entries
+    unsigned short ans_count; // number of answer entries
+    unsigned short auth_count; // number of authority entries
+    unsigned short add_count; // number of resource entries
+};
+
+
+
 
 void    error(char *err_msg)
 {
@@ -19,31 +41,20 @@ void    error(char *err_msg)
     exit(-1);
 }
 
-
-
-int					main(int argc, char const *argv[])
+int		create_server()
 {
-	int				sock;
-	int 			err;
-	fd_set			rset;
-	int				byte;
-	char			buffer[BUFF_SIZE];
-	
-	// Construct the server address structure
+	int	sock;
 	struct addrinfo	hints, *res;
 
-												// Criteria for address
+													// Criteria for address
 	bzero(&hints, sizeof(hints));					// Zero out structure
 	hints.ai_family = AF_UNSPEC;					// Any address family
 	hints.ai_flags = AI_PASSIVE;					// Accept on any address/port
-	hints.ai_socktype = SOCK_DGRAM;				// Only datagram socket
+	hints.ai_socktype = SOCK_DGRAM;		 			// Only datagram socket
 	hints.ai_protocol = IPPROTO_UDP;				// Only UDP socket
 
-
-
-
 	// struct addrinfo *res = NULL; // List of server addresses
-	if ((err = getaddrinfo(NULL, "8080", &hints, &res)))
+	if (getaddrinfo(NULL, "5487", &hints, &res))
 		error("getaddrinfo() failed");
 
 
@@ -60,8 +71,6 @@ int					main(int argc, char const *argv[])
 	printf("Only UDP socket %d\n", res->ai_protocol);
 /*******************************************************************************/
 
-
-
 	if ((sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol)) == -1)
 		error("socket() failed");
 	printf("sock == %d\n", sock);
@@ -70,19 +79,73 @@ int					main(int argc, char const *argv[])
 		close(sock);
 		error("bind() failed");
 	}
-	freeaddrinfo(res);	
+	freeaddrinfo(res);
 	printf("bind confirmed\n");
+	return (sock);
+}
+
+int					main(int argc, char const *argv[])
+{
+	int							sock;
+	int							recive_size;
+	char						buffer[BUFF_SIZE];
+	struct sockaddr_storage		client_adress;
+	socklen_t 					clnt_adrs_len;
+
+	sock = create_server();
+	clnt_adrs_len = sizeof(client_adress);
+	printf("sizeof(socklen_t) == %zu sizeof(client_adress) == %zu clnt_adrs_len == %d\n", sizeof(socklen_t), sizeof(client_adress), clnt_adrs_len);
 
 
 
+	int i;
 
 	while (1)
 	{
 		bzero(&buffer, sizeof(buffer));
-		byte = recvfrom(sock, buffer, sizeof(buffer), 0, );
+		recive_size = recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&client_adress, &clnt_adrs_len);
+		if (recive_size == -1)
+		{
+			error("recvfrom() failed");
+		}
+		
+		i = 0;
+
+		while (i < clnt_adrs_len)
+		{
+			printf("[%2d] ", buffer[i]);
+			if (i % 16 == 0)
+				printf("\n");
+			++i;
+		}
+		
+
+
+		printf("%d\n", recive_size);
+		printf("datagram: %.*s\n", (int)recive_size, buffer);
+
+
+
+
+
+
+
+
+		// if(decode_msg(&msg, buffer, recive_size) != 0)
+		// {
+		// 	continue;
+		// }
+
 
 
 
 	}
 	return (0);
 }
+
+
+
+
+
+
+
