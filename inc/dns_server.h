@@ -40,7 +40,7 @@ typedef struct			s_data
 
 
 
-void			init_data(t_data *data, char **line);
-void			read_conf_file(t_data *data, int fd);
-void			err_msg(char *line);
+// void			init_data(t_data *data, char **line);
+// void			read_conf_file(t_data *data, int fd);
+// void			err_msg(char *line);
 #endif
