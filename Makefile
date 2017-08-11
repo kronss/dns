@@ -32,7 +32,8 @@ SRC_NAME =		main.c \
 				init_data.c \
 				read_conf_file.c \
 				create_server.c \
-				check_domain.c 
+				check_domain.c \
+				catch_question.c
 	#sample5.c
 
 

@@ -16,7 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
-# define BUFF_SIZE 1500
+# define BUFF_SIZE 1024
 
 # define STDIN	0
 # define STDOUT	1

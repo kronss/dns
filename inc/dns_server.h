@@ -19,8 +19,8 @@
 // # include <resolv.h> // lib for dns
 
 
-
-
+# define BUF_SZ 1500
+	
 
 typedef struct			s_host_name
 {
@@ -41,6 +41,8 @@ typedef struct			s_data
 
 	struct s_host_name	*head;
 }						t_data;
+
+
 
 //DNS header structure
 typedef struct		s_dns_header
@@ -105,7 +107,8 @@ typedef struct
 void				init_data(t_data *data, char **line);
 void				read_conf_file(t_data *data, int fd);
 void				err_msg(char *line);
-int 				create_server(void);
+int					create_server(void);
+void				catch_question(t_data *data, int sockfd);
 int					check_domain(char *buffer, t_data *data);
 
 #endif

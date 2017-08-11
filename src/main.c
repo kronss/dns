@@ -15,6 +15,7 @@ static void			usage(void)
 int					main(int argc, char **argv)
 {
 	int				fd;
+	int				sockfd;
 	t_data			data;
 
 	if (argc != 2)
@@ -23,12 +24,6 @@ int					main(int argc, char **argv)
 	if ((fd = open(argv[1], O_RDONLY)) == -1)
 		err_msg(argv[1]);
 	read_conf_file(&data, fd);
-
-
-
-
-
-
 
 
 /***********************************************************/ //verbose
@@ -43,5 +38,16 @@ int					main(int argc, char **argv)
 	printf("redirect:\n%s\n", data.wall_ip);
 	printf("nameserver:\n%s\n", data.dns_ip);
 /***********************************************************/
+
+	
+
+
+	sockfd = create_server();
+
+	catch_question(&data, sockfd);
+
+
+
+
 	return (0);
 }
