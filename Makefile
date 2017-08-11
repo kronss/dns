@@ -31,7 +31,8 @@ SRC = $(addprefix $(SRC_DIR)/, $(SRC_NAME))
 SRC_NAME =		main.c \
 				init_data.c \
 				read_conf_file.c \
-				create_server.c
+				create_server.c \
+				check_domain.c 
 	#sample5.c
 
 

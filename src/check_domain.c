@@ -1,10 +1,26 @@
 #include "dns_server.h"
 
-int			check_domain(char *buffer, t_data *data)
+
+
+int					check_list(char *str, t_data *data)
 {
-	char *str;
-	char *tmp;
-	char *buf;
+	char test[] = "ukr.net";
+
+	if (ft_strstr(str, test))
+	{
+		return (1);
+	}
+	return (0);
+
+}
+
+
+
+int					check_domain(char *buffer, t_data *data)
+{
+	char			*str;
+	char			*tmp;
+	char			*buf;
 
 	buf = &buffer[12]; // skip header;
 
@@ -16,7 +32,8 @@ int			check_domain(char *buffer, t_data *data)
 			*tmp = '.';
 		tmp++;
 	}
-	printf("str == %s\nft_strlen(str) == %d\n", str, ft_strlen(str));
+
+	printf("str == %s\nft_strlen(str) == %d\n", str, ft_strlen(str)); // verbose
 
 
 	if (check_list(str, data))

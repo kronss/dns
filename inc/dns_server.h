@@ -43,27 +43,27 @@ typedef struct			s_data
 }						t_data;
 
 //DNS header structure
-struct dns_header
+typedef struct		s_dns_header
 {
-    unsigned short id; 		// identification number				2
+	unsigned short		id; // identification number				2
  
-    unsigned char rd :1; // recursion desired
-    unsigned char tc :1; // truncated message
-    unsigned char aa :1; // authoritive answer
-    unsigned char opcode :4; // purpose of message
-    unsigned char qr :1; // query/response flag 					1
+	unsigned char		rd :1; // recursion desired
+	unsigned char		tc :1; // truncated message
+	unsigned char		aa :1; // authoritive answer
+	unsigned char		opcode :4; // purpose of message
+	unsigned char		qr :1; // query/response flag 					1
  
-    unsigned char rcode :4; // response code
-    unsigned char cd :1; // checking disabled
-    unsigned char ad :1; // authenticated data
-    unsigned char z :1; // its z! reserved
-    unsigned char ra :1; // recursion available 					1
+	unsigned char		rcode :4; // response code
+	unsigned char		cd :1; // checking disabled
+	unsigned char		ad :1; // authenticated data
+	unsigned char		z :1; // its z! reserved
+	unsigned char		ra :1; // recursion available 					1
  
-    unsigned short q_count; // number of question entries 			2
-    unsigned short ans_count; // number of answer entries			2
-    unsigned short auth_count; // number of authority entries		2
-    unsigned short add_count; // number of resource entries			2
-};
+	unsigned short		q_count; // number of question entries 			2
+	unsigned short		ans_count; // number of answer entries			2
+	unsigned short		auth_count; // number of authority entries		2
+	unsigned short		add_count; // number of resource entries			2
+}					t_dns_header;
 
 
 
