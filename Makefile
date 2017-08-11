@@ -28,11 +28,13 @@ OBJ = $(subst .c,.o,$(subst $(SRC_DIR)/,$(OBJ_DIR)/,$(SRC)))
 #********* -SRC
 SRC_DIR =		./src
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_NAME))
-SRC_NAME =		sample5.c
+SRC_NAME =		main.c \
+				init_data.c \
+				read_conf_file.c \
+				create_server.c
+	#sample5.c
 
-				# main.c \
-				# init_data.c \
-				# read_conf_file.c
+
 # add .c file ---->
 ################################################################################
 #	RULES
@@ -71,4 +73,4 @@ rewq:
 rew: rewq all
 
 r:	all
-	./$(NAME) 
+	./$(NAME) configuration_file

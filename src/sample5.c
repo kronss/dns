@@ -11,86 +11,9 @@
 #include <unistd.h>
 
 
-
-
 #include "dns_server.h"
+
 #define BUFF_SIZE 1500
-
-//DNS header structure
-struct dns_header
-{
-    unsigned short id; // identification number						2
- 
-    unsigned char rd :1; // recursion desired
-    unsigned char tc :1; // truncated message
-    unsigned char aa :1; // authoritive answer
-    unsigned char opcode :4; // purpose of message
-    unsigned char qr :1; // query/response flag 					1
- 
-    unsigned char rcode :4; // response code
-    unsigned char cd :1; // checking disabled
-    unsigned char ad :1; // authenticated data
-    unsigned char z :1; // its z! reserved
-    unsigned char ra :1; // recursion available 					1
- 
-    unsigned short q_count; // number of question entries 			2
-    unsigned short ans_count; // number of answer entries			2
-    unsigned short auth_count; // number of authority entries		2
-    unsigned short add_count; // number of resource entries			2
-};
-
-
-
-
-void    error(char *err_msg)
-{
-    perror(err_msg);
-    exit(-1);
-}
-
-int		create_server()
-{
-	int	sock;
-	struct addrinfo	hints, *res;
-
-													// Criteria for address
-	bzero(&hints, sizeof(hints));					// Zero out structure
-	hints.ai_family = AF_UNSPEC;					// Any address family
-	hints.ai_flags = AI_PASSIVE;					// Accept on any address/port
-	hints.ai_socktype = SOCK_DGRAM;					// Only datagram socket
-	hints.ai_protocol = IPPROTO_UDP;				// Only UDP socket
-
-	// struct addrinfo *res = NULL; // List of server addresses
-	if (getaddrinfo(NULL, "5555", &hints, &res))
-		error("getaddrinfo() failed");
-
-
-
-/*******************************************************************************/
-	printf("Any address family %d\n" , hints.ai_family);
-	printf("Accept on any address/port %d\n" , hints.ai_flags);
-	printf("Only datagram socket %d\n", hints.ai_socktype);
-	printf("Only UDP socket %d\n", hints.ai_protocol);
-	printf("\n------------------------------------------------\n");
-	printf("Any address family %d\n" , res->ai_family);
-	printf("Accept on any address/port %d\n" , res->ai_flags);
-	printf("Only datagram socket %d\n", res->ai_socktype);
-	printf("Only UDP socket %d\n", res->ai_protocol);
-/*******************************************************************************/
-
-	if ((sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol)) == -1)
-		error("socket() failed");
-	printf("sock == %d\n", sock);
-	if (bind(sock, res->ai_addr, res->ai_addrlen) == -1)
-	{
-		close(sock);
-		error("bind() failed");
-	}
-	freeaddrinfo(res);
-	printf("bind confirmed\n");
-	return (sock);
-}
-
 
 
 
@@ -114,8 +37,11 @@ int 	check_domain(char *buffer, t_data *data)
 {
 	char *str;
 	char *tmp;
+	char *buf;
 
-	str = ft_strsub(buffer, 1, ft_strlen(buffer));
+	buf = &buffer[12]; // skip header;
+
+	str = ft_strsub(buf, 1, ft_strlen(buf));
 	tmp = str;
 	while (*tmp != '\0')
 	{
@@ -124,9 +50,6 @@ int 	check_domain(char *buffer, t_data *data)
 		tmp++;
 	}
 	printf("str == %s\nft_strlen(str) == %d\n", str, ft_strlen(str));
-
-
-
 
 
 	if (check_list(str, data))
@@ -156,7 +79,7 @@ int					main(int argc, char const *argv[])
 	int							recive_size;
 	char						buffer[BUFF_SIZE];
 	struct sockaddr_in			client_adress;
-	struct sockaddr_in			server_adress;
+	// struct sockaddr_in			server_adress;
 	socklen_t 					clnt_adrs_len;
 	t_data 						data;
 
@@ -181,6 +104,7 @@ int					main(int argc, char const *argv[])
 	struct dns_header *dns_h;
 
 	int z;
+	ushort id;
 
 	while (1)
 	{
@@ -192,18 +116,42 @@ int					main(int argc, char const *argv[])
 		}
 
 			printf("recive_size == %d\n", recive_size);
-			printf("datagram: %.*s\n", (int)recive_size, buffer);
 		strcpy(incom_ip_address, inet_ntoa(client_adress.sin_addr));
 		
+		dns_h = (struct dns_header *)&buffer;
+		id = dns_h->id;
 
 
-		if (check_domain(&buffer[12], &data))
+
+		printf("id %hu\n", id);
+		printf("clnt_adrs_len == %d\n", clnt_adrs_len);
+		printf("recive_size == %d\n", recive_size);
+		i = 0;
+		printf("\n---------------------question-----------------------\n");
+		while (i < recive_size)
+		{
+			printf("%d = [%c][%u] ", i, buffer[i], buffer[i]);
+			++i;
+			if (i % 12 == 0)
+				printf("\n");
+			
+		}
+		printf("\n");
+		printf("IP   == %s\n", incom_ip_address);
+		printf("PORT == %d\n", client_adress.sin_port);
+
+
+
+
+		if (check_domain(buffer, &data))
 		{
 			printf("sendo to client\n");
 
 
 			dns_h = (struct dns_header *)&buffer;
+			dns_h->id = id;
 			dns_h->qr = 1;
+			// dns_h->rcode = 1;
 
 
 			buffer[36] = (char)4;
@@ -216,7 +164,7 @@ int					main(int argc, char const *argv[])
 
 		    	z = 0;
 
-		        printf("\n---------------------question-----------------------\n");
+		        printf("\n---------------------answer-----------------------\n");
 		        while (z < 100)
 		        {
 		            printf("%d = [%c][%hhu] ", z, buffer[z], buffer[z]);
@@ -234,25 +182,13 @@ int					main(int argc, char const *argv[])
 
 
 
-		printf("clnt_adrs_len == %d\n", clnt_adrs_len);
-		printf("recive_size == %d\n", recive_size);
-		i = 0;
-		while (i < recive_size)
-		{
-			printf("%d = [%c][%d] ", i, buffer[i], buffer[i]);
-			++i;
-			if (i % 12 == 0)
-				printf("\n");
-			
-		}
-		printf("\n");
+		
 
 		
 
 
 
-		printf("IP   == %s\n", incom_ip_address);
-		printf("PORT == %d\n", client_adress.sin_port);
+	
 
 		
 

@@ -1,17 +1,11 @@
 # configuration file
-# #  - coment
-# ## - control char
 
+black_list:
+vk.com
+ukr.net
 
+redirect:
+0.0.0.0
 
-## black_list:
-*.google.com
-*.google.com
-*.google.com
-*.vk.com
-
-
-## wall
-*.amazon.com
-
-## server-adress
+nameserver:
+8.8.8.8
