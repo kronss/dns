@@ -19,14 +19,14 @@ void				catch_question(t_data *data, int sockfd)
 	
 	t_dns_header *dns_h;
 
-	int z;
+	uint z;
 	ushort id;
 //=======
 
-
+	bzero(&buffer, sizeof(buffer));
 	while (1)
 	{
-		bzero(&buffer, sizeof(buffer));
+		
 		
 		bzero(&incom_ip_address, sizeof(incom_ip_address)); // verbose
 		
@@ -37,21 +37,40 @@ void				catch_question(t_data *data, int sockfd)
 		}
 
 			printf("recive_size == %d\n", recive_size);
-		strcpy(incom_ip_address, inet_ntoa(client_adress.sin_addr));
+			strcpy(incom_ip_address, inet_ntoa(client_adress.sin_addr));
 		
 		dns_h = (t_dns_header *)&buffer;
-		id = dns_h->id;
+
+/********************** verbose ******************************************************************/
+	printf("====================================DNS HEADER====================================\n");
+	printf("%10hu - id; // identification number(2)\n--\n", dns_h->id);
+
+ 	printf("%10hhu - rd :1; // recursion desired\n", dns_h->rd);
+	printf("%10hhu - tc :1; // truncated message\n", dns_h->tc);
+	printf("%10hhu - aa :1; // authoritive answer\n", dns_h->aa);
+	printf("%10hhu - opcode :4; // purpose of message\n", dns_h->opcode);
+	printf("%10hhu - qr :1; // query/response flag(1)\n--\n", dns_h->qr);
+ 
+	printf("%10hhu - rcode :4; // response code\n", dns_h->rcode);
+	printf("%10hhu - cd :1; // checking disabled\n", dns_h->cd);
+	printf("%10hhu - ad :1; // authenticated data\n", dns_h->ad);
+	printf("%10hhu - z :1; // its z! reserved\n", dns_h->z);
+	printf("%10hhu - ra :1; // recursion available(1)\n--\n", dns_h->ra);
+ 
+	printf("%10hu - q_count; // number of question entries(2)\n", dns_h->q_count);
+	printf("%10hu - ans_count; // number of answer entries(2)\n", dns_h->ans_count);
+	printf("%10hu - auth_count; // number of authority entries(2)\n", dns_h->auth_count);
+	printf("%10hu - add_count; // number of resource entries(2)\n", dns_h->add_count);
+	printf(".................................................................................\n");
+/*************************************************************************************************/
 
 
 
-		printf("id %hu\n", id);
-		printf("clnt_adrs_len == %d\n", clnt_adrs_len);
-		printf("recive_size == %d\n", recive_size);
 		z = 0;
 		printf("\n---------------------question-----------------------\n");
 		while (z < recive_size)
 		{
-			printf("%d = [%c][%u] ", z, buffer[z], buffer[z]);
+			printf("%u = [%c][%hhu] ", z, buffer[z], buffer[z]);
 			++z;
 			if (z % 12 == 0)
 				printf("\n");
@@ -69,17 +88,17 @@ void				catch_question(t_data *data, int sockfd)
 			printf("sendo to client\n");
 
 
-			dns_h = (t_dns_header *)&buffer;
-			dns_h->id = id;
-			dns_h->qr = 1;
-			// dns_h->rcode = 1;
+			// dns_h = (t_dns_header *)&buffer;
+			dns_h->id = getpid();
+			// dns_h->qr = 1;
+			// // dns_h->rcode = 1;
 
 
-			buffer[36] = (char)4;
-			buffer[37] = (char)212;
-			buffer[38] = (char)42;
-			buffer[39] = (char)76;
-			buffer[40] = (char)253;
+			// buffer[36] = (char)4;
+			// buffer[37] = (char)212;
+			// buffer[38] = (char)42;
+			// buffer[39] = (char)76;
+			// buffer[40] = (char)253;
 
 
 

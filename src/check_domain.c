@@ -2,23 +2,16 @@
 
 int					check_list(char *str, t_host_name *tmp)
 {
-	printf("in\n");
-	printf("%s\n", tmp->host_name);
 	while (tmp)
 	{
 		if (ft_strstr(str, tmp->host_name))
 		{
-			printf("out\n");
 			return (1);
 		}
 		tmp = tmp->next;
 	}
-	printf("out\n");
 	return (0);
 }
-
-
-
 
 int					check_domain(char *buffer, t_data *data)
 {
@@ -26,7 +19,7 @@ int					check_domain(char *buffer, t_data *data)
 	char			*tmp;
 	char			*buf;
 
-	buf = &buffer[12]; // skip header;
+	buf = &buffer[12]; // skip header datagram;
 
 	str = ft_strsub(buf, 1, ft_strlen(buf));
 	tmp = str;
@@ -38,7 +31,7 @@ int					check_domain(char *buffer, t_data *data)
 		tmp++;
 	}
 
-	printf("str == %s\nft_strlen(str) == %d\n", str, ft_strlen(str)); // verbose
+	printf("data ==> %s\nft_strlen(str) == %d\n", str, ft_strlen(str)); // verbose
 	// printf("%p\n", data->head);
 	// printf("============= %s\n", data->head->host_name);
 
@@ -47,7 +40,7 @@ int					check_domain(char *buffer, t_data *data)
 		ft_putendl("black_list");
 		ft_strdel(&str);
 		return (1);
-	}	
+	}
 	else
 	{
 		/* if not contain in black list */

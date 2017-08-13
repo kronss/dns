@@ -1,6 +1,8 @@
 CC = gcc
-CFLAGS =   -I./$(LIB_DIR_INC) -I./$(INC_DIR)
+CFLAGS =   -I./$(LIB_DIR_INC) -I./$(INC_DIR) 
+
 #-lresolv
+
 SHELL = /bin/sh
 
 ################################################################################

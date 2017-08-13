@@ -47,7 +47,7 @@ struct DNS_HEADER
     unsigned char ra :1; // recursion available                     2
  
     unsigned short q_count; // number of question entries           2
-    unsigned short ans_count; // number of answer entries
+    unsigned short ans_count; // number of answer entries           
     unsigned short auth_count; // number of authority entries
     unsigned short add_count; // number of resource entries
 };
@@ -160,6 +160,8 @@ void ngethostbyname(unsigned char *host , int query_type)
     qinfo->qtype = htons( query_type ); //type of the query , A , MX , CNAME , NS etc
     qinfo->qclass = htons(1); //its internet (lol)
  
+
+
     int z;
 
     z = 0;
@@ -177,6 +179,8 @@ void ngethostbyname(unsigned char *host , int query_type)
 
 
 
+
+
     printf("\nSending Packet...");
     if( sendto(s,(char*)buf,sizeof(struct DNS_HEADER) + (strlen((const char*)qname)+1) + sizeof(struct QUESTION),0,(struct sockaddr*)&dest,sizeof(dest)) < 0)
     {
@@ -187,7 +191,7 @@ void ngethostbyname(unsigned char *host , int query_type)
     //Receive the answer
     i = sizeof dest;
     printf("\nReceiving answer...");
-    
+
 
 
     if((recvfrom (s,(char*)buf , 65535 , 0 , (struct sockaddr*)&dest , (socklen_t*)&i ) < 0))
