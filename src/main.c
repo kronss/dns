@@ -6,9 +6,11 @@ void				err_msg(char *line)
 	exit(1);
 }
 
-static void			usage(void)
+static void			usage(char *str)
 {
-	ft_putendl("usage: ./dns-proxy-server configuration_file"); // -add -dell
+	ft_putstr("usage: ");
+	ft_putstr(str);
+	ft_putstr(" configuration_file\n"); // -add -dell
 	exit(0);
 }
 
@@ -19,7 +21,7 @@ int					main(int argc, char **argv)
 	t_data			data;
 
 	if (argc != 2)
-		usage();
+		usage(argv[0]);
 
 	if ((fd = open(argv[1], O_RDONLY)) == -1)
 		err_msg(argv[1]);
@@ -35,19 +37,12 @@ int					main(int argc, char **argv)
 		printf("%20s\n", tmp->host_name);
 		tmp = tmp->next;
 	}
-	printf("redirect:\n%s\n", data.wall_ip);
-	printf("nameserver:\n%s\n", data.dns_ip);
+	printf("redirect:\n%20s\n", data.wall_ip);
+	printf("nameserver:\n%20s\n", data.dns_ip);
 /***********************************************************/
-
-	
-
 
 	sockfd = create_server();
 
 	catch_question(&data, sockfd);
-
-
-
-
 	return (0);
 }

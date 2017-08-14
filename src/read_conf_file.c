@@ -39,7 +39,6 @@ void				read_black_list(t_host_name **head, int fd)
 	line = NULL;
 	while ((check = get_next_line(fd, &line) > 0))
 	{
-		printf("%s\n", line); // verbose
 		if (ft_strcmp(line, ""))
 			add_host(head, line);
 		else

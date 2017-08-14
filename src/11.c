@@ -136,16 +136,19 @@ void ngethostbyname(unsigned char *host , int query_type)
     dns = (struct DNS_HEADER *)&buf;
  
     dns->id = (unsigned short) htons(getpid());
+
     dns->qr = 0; //This is a query
     dns->opcode = 0; //This is a standard query
     dns->aa = 0; //Not Authoritative
     dns->tc = 0; //This message is not truncated
     dns->rd = 1; //Recursion Desired
+    
     dns->ra = 0; //Recursion not available! hey we dont have it (lol)
     dns->z = 0;
     dns->ad = 0;
     dns->cd = 0;
     dns->rcode = 0;
+    
     dns->q_count = htons(1); //we have only 1 question
     dns->ans_count = 0;
     dns->auth_count = 0;
@@ -167,6 +170,29 @@ void ngethostbyname(unsigned char *host , int query_type)
     z = 0;
 
         printf("\n---------------------question-----------------------\n");
+
+            /********************** verbose ******************************************************************/
+    printf("====================================DNS HEADER====================================\n");
+    printf("%10hu - id; // identification number\n--\n", dns->id);
+
+    printf("%10hhu - rd :1; // recursion desired\n", dns->rd);
+    printf("%10hhu - tc :1; // truncated message\n", dns->tc);
+    printf("%10hhu - aa :1; // authoritive answer\n", dns->aa);
+    printf("%10hhu - opcode :4; // purpose of message\n", dns->opcode);
+    printf("%10hhu - qr :1; // query/response flag\n--\n", dns->qr);
+ 
+    printf("%10hhu - rcode :4; // response code\n", dns->rcode);
+    printf("%10hhu - cd :1; //  checking disabled\n", dns->cd);
+    printf("%10hhu - ad :1; //  authenticated data\n", dns->ad);
+    printf("%10hhu - z :1; // its z! reserved\n", dns->z);
+    printf("%10hhu - ra :1; // recursion available \n--\n", dns->ra);
+ 
+    printf("%10hu - q_count; // number of question entries(2)\n", dns->q_count);
+    printf("%10hu - ans_count; // number of answer entries(2)\n", dns->ans_count);
+    printf("%10hu - auth_count; // number of authority entries(2)\n", dns->auth_count);
+    printf("%10hu - add_count; // number of resource entries(2)\n", dns->add_count);
+    printf(".................................................................................\n");
+/*************************************************************************************************/
         while (z < 100)
         {
             printf("%d = [%c][%d] ", z, buf[z], buf[z]);
@@ -205,6 +231,28 @@ void ngethostbyname(unsigned char *host , int query_type)
     z = 0;
 
         printf("\n----------------------answer-----------------------\n");
+                    /********************** verbose ******************************************************************/
+    printf("====================================DNS HEADER====================================\n");
+    printf("%10hu - id; // identification number\n--\n", dns->id);
+
+    printf("%10hhu - rd :1; // recursion desired\n", dns->rd);
+    printf("%10hhu - tc :1; // truncated message\n", dns->tc);
+    printf("%10hhu - aa :1; // authoritive answer\n", dns->aa);
+    printf("%10hhu - opcode :4; // purpose of message\n", dns->opcode);
+    printf("%10hhu - qr :1; // query/response flag\n--\n", dns->qr);
+ 
+    printf("%10hhu - rcode :4; // response code\n", dns->rcode);
+    printf("%10hhu - cd :1; //  checking disabled\n", dns->cd);
+    printf("%10hhu - ad :1; //  authenticated data\n", dns->ad);
+    printf("%10hhu - z :1; // its z! reserved\n", dns->z);
+    printf("%10hhu - ra :1; // recursion available \n--\n", dns->ra);
+ 
+    printf("%10hu - q_count; // number of question entries(2)\n", dns->q_count);
+    printf("%10hu - ans_count; // number of answer entries(2)\n", dns->ans_count);
+    printf("%10hu - auth_count; // number of authority entries(2)\n", dns->auth_count);
+    printf("%10hu - add_count; // number of resource entries(2)\n", dns->add_count);
+    printf(".................................................................................\n");
+/*************************************************************************************************/
         while (z < 100)
         {
             printf("%d = [%c][%d] ", z, buf[z], buf[z]);
@@ -448,7 +496,7 @@ void get_dns_servers()
     strcpy(dns_servers[0] , "8.8.8.8");
     // strcpy(dns_servers[1] , "208.67.220.220");
 }
- 
+
 /*
  * This will convert www.google.com to 3www6google3com 
  * got it :)

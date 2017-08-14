@@ -23,7 +23,7 @@
 // # include <resolv.h> // lib for dns
 
 
-# define BUF_SZ 1500
+# define BUF_SZ 512
 	
 
 typedef struct			s_host_name
@@ -57,14 +57,12 @@ typedef struct		s_dns_header
 	unsigned char		tc :1; // truncated message
 	unsigned char		aa :1; // authoritive answer
 	unsigned char		opcode :4; // purpose of message
-	unsigned char		qr :1; // query/response flag 					1
- 
+	unsigned char		qr :1; // query/response flag                   1
+
 	unsigned char		rcode :4; // response code
-	unsigned char		cd :1; // checking disabled
-	unsigned char		ad :1; // authenticated data
-	unsigned char		z :1; // its z! reserved
+	unsigned char		z :3; // its z! reserved
 	unsigned char		ra :1; // recursion available 					1
- 
+
 	unsigned short		q_count; // number of question entries 			2
 	unsigned short		ans_count; // number of answer entries			2
 	unsigned short		auth_count; // number of authority entries		2
@@ -108,12 +106,17 @@ typedef struct
 } QUERY;
 
 
+
+
+
+
 void				init_data(t_data *data, char **line);
 void				read_conf_file(t_data *data, int fd);
 void				err_msg(char *line);
 int					create_server(void);
 void				catch_question(t_data *data, int sockfd);
 int					check_domain(char *buffer, t_data *data);
+void				send_refused(int sockfd, char *buffer, int recive_byte, struct sockaddr_in *client, socklen_t *clnt_adrs_len);
 
 #endif
 

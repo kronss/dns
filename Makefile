@@ -35,7 +35,8 @@ SRC_NAME =		main.c \
 				read_conf_file.c \
 				create_server.c \
 				check_domain.c \
-				catch_question.c
+				catch_question.c \
+				send_refused.c
 	#sample5.c
 
 
@@ -72,9 +73,10 @@ fclean: clean
 re: fclean all
 
 rewq:
+	rm -rf $(OBJ_DIR)
 	rm -f $(NAME)
 
 rew: rewq all
 
 r:	all
-	./$(NAME) configuration_file
+	./$(NAME) file.conf
