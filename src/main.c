@@ -10,7 +10,7 @@ static void			usage(char *str)
 {
 	ft_putstr("usage: ");
 	ft_putstr(str);
-	ft_putstr(" configuration_file\n"); // -add -dell
+	ft_putstr(" configuration_file\n");
 	exit(0);
 }
 
@@ -27,19 +27,18 @@ int					main(int argc, char **argv)
 		err_msg(argv[1]);
 	read_conf_file(&data, fd);
 
-
-/***********************************************************/ //verbose
-	printf("======== input data ========\n");
-	printf("black_list:\n");
-	t_host_name *tmp = data.head;
-	while (tmp)
-	{
-		printf("%20s\n", tmp->host_name);
-		tmp = tmp->next;
-	}
-	printf("redirect:\n%20s\n", data.wall_ip);
-	printf("nameserver:\n%20s\n", data.dns_ip);
-/***********************************************************/
+// /***********************************************************/ //verbose
+// 	printf("======== input data ========\n");
+// 	printf("black_list:\n");
+// 	t_host_name *tmp = data.head;
+// 	while (tmp)
+// 	{
+// 		printf("%20s\n", tmp->host_name);
+// 		tmp = tmp->next;
+// 	}
+// 	printf("redirect:\n%20s\n", data.wall_ip);
+// 	printf("nameserver:\n%20s\n", data.dns_ip);
+// /***********************************************************/
 
 	sockfd = create_server();
 

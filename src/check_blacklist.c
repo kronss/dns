@@ -31,20 +31,16 @@ int					check_blacklist(char *buffer, t_data *data)
 		tmp++;
 	}
 
-	printf("data ==> %s\nft_strlen(str) == %d\n", str, ft_strlen(str)); // verbose
-	// printf("%p\n", data->head);
-	// printf("============= %s\n", data->head->host_name);
-
 	if (check_list(str, data->head))
 	{
-		ft_putendl("black_list");
+		// ft_putendl("black_list");
 		ft_strdel(&str);
 		return (1);
 	}
 	else
 	{
 		/* if not contain in black list */
-		ft_putendl("white_list");
+		// ft_putendl("white_list");
 		ft_strdel(&str);
 		return (0);
 	}
