@@ -1,5 +1,5 @@
 ## DNS
-# Very simple dns-proxy server with support for blacklist
+Very simple dns-proxy server with support for blacklist
 
 usage:
 make r
