@@ -115,8 +115,9 @@ void				read_conf_file(t_data *data, int fd);
 void				err_msg(char *line);
 int					create_server(void);
 void				catch_question(t_data *data, int sockfd);
-int					check_domain(char *buffer, t_data *data);
-void				send_refused(int sockfd, char *buffer, int recive_byte, struct sockaddr_in *client, socklen_t *clnt_adrs_len);
+int					check_blacklist(char *buffer, t_data *data);
+void				send_refused(int sockfd, char *buffer, int recive_byte, struct sockaddr_in *client);
+int					resend_query(t_data *data, char *buffer, int recive_byte);
 
 #endif
 

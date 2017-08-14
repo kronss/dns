@@ -13,7 +13,7 @@ int					check_list(char *str, t_host_name *tmp)
 	return (0);
 }
 
-int					check_domain(char *buffer, t_data *data)
+int					check_blacklist(char *buffer, t_data *data)
 {
 	char			*str;
 	char			*tmp;

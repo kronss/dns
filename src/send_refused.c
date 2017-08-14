@@ -1,11 +1,12 @@
 #include "dns_server.h"
 
-void		send_refused(int sockfd, char *buffer, int recive_byte, struct sockaddr_in *client, socklen_t *clnt_adrs_len)
+void		send_refused(int sockfd, char *buffer, int recive_byte, struct sockaddr_in *client)
 {
 	t_dns_header 				*dns_h;
+	socklen_t 					clnt_adrs_len;
 	int							send_byte;
 
-	// clnt_adrs_len = sizeof(client);
+	clnt_adrs_len = sizeof(*client);
 
 	printf("sendo erro msg to client\n");
 
@@ -19,7 +20,12 @@ void		send_refused(int sockfd, char *buffer, int recive_byte, struct sockaddr_in
 
 	dns_h->ra = 0;
 	dns_h->z = 0;
-	dns_h->rcode= 5; // set refused
+	dns_h->rcode = 5; // set refused
+	// dns_h->q_count = 0; // number of question entries 			2
+	dns_h->ans_count = 0; //htons(0); // number of answer entries			2
+	// dns_h->auth_count = 0; // number of authority entries		2
+	// dns_h->add_count = 0; // number of resource entries			2
+
 
 /********************** verbose ******************************************************************/
 	int z;
@@ -53,8 +59,7 @@ void		send_refused(int sockfd, char *buffer, int recive_byte, struct sockaddr_in
         }
         printf("\n");
 /*************************************************************************************************/
-
-	send_byte =	sendto(sockfd, buffer, recive_byte, 0, (struct sockaddr*)client, *clnt_adrs_len);
+	send_byte =	sendto(sockfd, buffer, recive_byte, 0, (struct sockaddr*)client, clnt_adrs_len);
 	if (send_byte == -1)
 	{
 		err_msg("sendto() failed");
