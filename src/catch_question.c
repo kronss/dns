@@ -1,5 +1,7 @@
 #include "dns_server.h"
 
+
+
 void				catch_question(t_data *data, int sockfd)
 {
 	int							recive_byte;
@@ -17,17 +19,17 @@ void				catch_question(t_data *data, int sockfd)
 	
 		recive_byte = recvfrom(sockfd, buffer, BUF_SZ, 0, (struct sockaddr*)&client, &clnt_adrs_len);
 		if (recive_byte == -1)
-			err_msg("recvfrom() failed");
+			err_msg(data, "recvfrom() failed");
 
 		if (check_blacklist(buffer, data))
-			send_refused(sockfd, buffer, recive_byte, &client);
+			send_refused(data, sockfd, buffer, recive_byte, &client);
 		else
 		{
 			n = resend_query(data, buffer, recive_byte);
 			send_byte =	sendto(sockfd, buffer, n, 0, (struct sockaddr*)&client, clnt_adrs_len);
 			if (send_byte == -1)
 			{
-				err_msg("sendto() failed");
+				err_msg(data, "sendto() failed");
 			}
 		}
 	}

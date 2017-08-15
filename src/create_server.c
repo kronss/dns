@@ -1,6 +1,6 @@
 #include "dns_server.h"
 
-int						create_server(void)
+int						create_server(t_data *data)
 {
 	int					sockfd;
 	struct sockaddr_in	server;
@@ -8,7 +8,7 @@ int						create_server(void)
 
 
 	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
-		err_msg("socket() failed");
+		err_msg(data, "socket() failed");
 
 	bzero(&server, sizeof(server));				
 	server.sin_family = AF_INET;
@@ -22,13 +22,13 @@ int						create_server(void)
 	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) == -1)
 	{
     	close(sockfd);
-    	err_msg("setsockopt(SO_REUSEADDR) failed");
+    	err_msg(data, "setsockopt(SO_REUSEADDR) failed");
 	}
 
 	if (bind(sockfd, (struct sockaddr *)&server, sizeof(server)) == -1)
 	{
 		close(sockfd);
-		err_msg("bind() failed");
+		err_msg(data, "bind() failed");
 	}
 
 	return (sockfd);

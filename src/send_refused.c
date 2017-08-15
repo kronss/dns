@@ -5,7 +5,7 @@
 ** return datagram with ERROR opcode to client
 */
 
-void		send_refused(int sockfd, char *buffer, int recive_byte, struct sockaddr_in *client)
+void		send_refused(t_data *data, int sockfd, char *buffer, int recive_byte, struct sockaddr_in *client)
 {
 	t_dns_header 				*dns_h;
 	socklen_t 					clnt_adrs_len;
@@ -21,6 +21,6 @@ void		send_refused(int sockfd, char *buffer, int recive_byte, struct sockaddr_in
 	send_byte =	sendto(sockfd, buffer, recive_byte, 0, (struct sockaddr*)client, clnt_adrs_len);
 	if (send_byte == -1)
 	{
-		err_msg("sendto() failed");
+		err_msg(data, "sendto() failed");
 	}
 }

@@ -47,13 +47,15 @@ typedef struct			s_dns_header
 	unsigned short		add_count;	// number of resource entries		2 byte
 }						t_dns_header;
 
-void				init_data(t_data *data, char **line);
+void				init_data(t_data *data);
 void				read_conf_file(t_data *data, int fd);
-void				err_msg(char *line);
-int					create_server(void);
+void				err_msg(t_data *data, char *line);
+int					create_server(t_data *data);
 void				catch_question(t_data *data, int sockfd);
 int					check_blacklist(char *buffer, t_data *data);
-void				send_refused(int sockfd, char *buffer, int recive_byte, struct sockaddr_in *client);
+void				send_refused(t_data *data, int sockfd, char *buffer, int recive_byte, struct sockaddr_in *client);
 int					resend_query(t_data *data, char *buffer, int recive_byte);
+void				destruct(t_data *data);
+
 
 #endif
