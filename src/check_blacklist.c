@@ -33,14 +33,11 @@ int					check_blacklist(char *buffer, t_data *data)
 
 	if (check_list(str, data->head))
 	{
-		// ft_putendl("black_list");
 		ft_strdel(&str);
-		return (1);
+		return (1); // black_list
 	}
 	else
 	{
-		/* if not contain in black list */
-		// ft_putendl("white_list");
 		ft_strdel(&str);
 		return (0);
 	}

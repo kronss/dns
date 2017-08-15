@@ -25,20 +25,8 @@ int					main(int argc, char **argv)
 
 	if ((fd = open(argv[1], O_RDONLY)) == -1)
 		err_msg(argv[1]);
-	read_conf_file(&data, fd);
 
-// /***********************************************************/ //verbose
-// 	printf("======== input data ========\n");
-// 	printf("black_list:\n");
-// 	t_host_name *tmp = data.head;
-// 	while (tmp)
-// 	{
-// 		printf("%20s\n", tmp->host_name);
-// 		tmp = tmp->next;
-// 	}
-// 	printf("redirect:\n%20s\n", data.wall_ip);
-// 	printf("nameserver:\n%20s\n", data.dns_ip);
-// /***********************************************************/
+	read_conf_file(&data, fd);
 
 	sockfd = create_server();
 
