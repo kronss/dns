@@ -113,5 +113,6 @@ int					ft_max(int a, int b);
 long				ft_atol(const char *str);
 void				q_sort(int *s_arr, int first, int last);
 char				*ft_itoa_base(int value, int base);
+void				ft_delnode(t_lst **head, t_lst *lst);
 
 #endif

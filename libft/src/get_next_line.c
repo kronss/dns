@@ -119,7 +119,6 @@ int							get_next_line(const int fd, char **line)
 	}
 	if (*line)
 		return (1);
-	*line = ft_strdup("");
-	
+	ft_delnode(&head, lst);
 	return (0);
 }
