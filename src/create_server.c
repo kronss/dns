@@ -3,8 +3,8 @@
 int						create_server(t_data *data)
 {
 	int					sockfd;
-	struct sockaddr_in	server;
 	int					enable;
+	struct sockaddr_in	server;
 
 
 	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
