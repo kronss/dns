@@ -3,8 +3,8 @@
 int						create_server(t_data *data)
 {
 	int					sockfd;
-	struct sockaddr_in	server;
 	int					enable;
+	struct sockaddr_in	server;
 
 
 	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
@@ -13,7 +13,6 @@ int						create_server(t_data *data)
 	bzero(&server, sizeof(server));				
 	server.sin_family = AF_INET;
 	server.sin_addr.s_addr = INADDR_ANY;
-
 
 	server.sin_port = htons(53); // std port
 	// server.sin_port = htons(5555);  // test port

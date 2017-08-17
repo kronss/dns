@@ -1,7 +1,5 @@
 #include "dns_server.h"
 
-
-
 void				catch_question(t_data *data, int sockfd)
 {
 	int							recive_byte;
@@ -10,6 +8,7 @@ void				catch_question(t_data *data, int sockfd)
 	char						buffer[BUF_SZ];
 	struct sockaddr_in			client;
 	socklen_t					clnt_adrs_len;
+	int 						pid;
 
 	clnt_adrs_len = sizeof(client);
 
@@ -20,17 +19,25 @@ void				catch_question(t_data *data, int sockfd)
 		recive_byte = recvfrom(sockfd, buffer, BUF_SZ, 0, (struct sockaddr*)&client, &clnt_adrs_len);
 		if (recive_byte == -1)
 			err_msg(data, "recvfrom() failed");
+		pid = fork();
+		if (pid == -1)
+			err_msg(data, "fork() failed");
 
-		if (check_blacklist(buffer, data))
-			send_refused(data, sockfd, buffer, recive_byte, &client);
-		else
+		if (pid == 0)
 		{
-			n = resend_query(data, buffer, recive_byte);
-			send_byte =	sendto(sockfd, buffer, n, 0, (struct sockaddr*)&client, clnt_adrs_len);
-			if (send_byte == -1)
+			if (check_blacklist(buffer, data))
+					send_refused(data, sockfd, buffer, recive_byte, &client);
+			else
 			{
-				err_msg(data, "sendto() failed");
+				n = resend_query(data, buffer, recive_byte);
+				send_byte =	sendto(sockfd, buffer, n, 0, (struct sockaddr*)&client, clnt_adrs_len);
+				if (send_byte == -1)
+				{
+					err_msg(data, "sendto() failed");
+				}
 			}
+			close(sockfd);
+			exit(0);
 		}
 	}
 }
