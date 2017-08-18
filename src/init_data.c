@@ -2,8 +2,8 @@
 
 void			init_data(t_data *data)
 {
-	bzero(data->wall_ip, sizeof(data->wall_ip));
 	bzero(data->dns_ip, sizeof(data->dns_ip));
+	bzero(data->blacklist, sizeof(data->blacklist));
 
 	data->head = NULL;
 }

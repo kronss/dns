@@ -18,10 +18,10 @@ void				catch_question(t_data *data, int sockfd)
 	
 		recive_byte = recvfrom(sockfd, buffer, BUF_SZ, 0, (struct sockaddr*)&client, &clnt_adrs_len);
 		if (recive_byte == -1)
-			err_msg(data, "recvfrom() failed");
+			err_msg("recvfrom() failed");
 		pid = fork();
 		if (pid == -1)
-			err_msg(data, "fork() failed");
+			err_msg("fork() failed");
 
 		if (pid == 0)
 		{
@@ -33,10 +33,9 @@ void				catch_question(t_data *data, int sockfd)
 				send_byte =	sendto(sockfd, buffer, n, 0, (struct sockaddr*)&client, clnt_adrs_len);
 				if (send_byte == -1)
 				{
-					err_msg(data, "sendto() failed");
+					err_msg("sendto() failed");
 				}
 			}
-			destruct(data);
 			close(sockfd);
 			exit(0);
 		}

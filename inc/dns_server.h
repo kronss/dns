@@ -12,18 +12,10 @@
 
 # define BUF_SZ 512
 
-
-typedef struct			s_host_name
-{
-	char				*host_name;
-	uint				ip;
-	struct s_host_name	*next;
-}						t_host_name;
-
 typedef struct			s_data
 {
-	char				wall_ip[17];
-	char				dns_ip[17];	
+	char				dns_ip[17];
+	char				blacklist[10][20];
 	struct s_host_name	*head;
 }						t_data;
 
@@ -49,13 +41,12 @@ typedef struct			s_dns_header
 
 void				init_data(t_data *data);
 void				read_conf_file(t_data *data, int fd);
-void				err_msg(t_data *data, char *line);
-int					create_server(t_data *data);
+void				err_msg(char *line);
+int					create_server(void);
 void				catch_question(t_data *data, int sockfd);
 int					check_blacklist(char *buffer, t_data *data);
 void				send_refused(t_data *data, int sockfd, char *buffer, int recive_byte, struct sockaddr_in *client);
 int					resend_query(t_data *data, char *buffer, int recive_byte);
 void				destruct(t_data *data);
-
 
 #endif

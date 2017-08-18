@@ -1,14 +1,17 @@
 #include "dns_server.h"
 
-int					check_list(char *str, t_host_name *tmp)
+int					check_list(char *str, char blacklist[10][20])
 {
-	while (tmp)
+	int				i;
+	
+	i = 0;
+	while (i < 10)
 	{
-		if (ft_strstr(str, tmp->host_name))
+		if (strstr(blacklist[i], str))
 		{
 			return (1);
 		}
-		tmp = tmp->next;
+		++i;
 	}
 	return (0);
 }
@@ -31,7 +34,7 @@ int					check_blacklist(char *buffer, t_data *data)
 		tmp++;
 	}
 
-	if (check_list(str, data->head))
+	if (check_list(str, data->blacklist))
 	{
 		ft_strdel(&str);
 		return (1); // black_list

@@ -21,6 +21,6 @@ void		send_refused(t_data *data, int sockfd, char *buffer, int recive_byte, stru
 	send_byte =	sendto(sockfd, buffer, recive_byte, 0, (struct sockaddr*)client, clnt_adrs_len);
 	if (send_byte == -1)
 	{
-		err_msg(data, "sendto() failed");
+		err_msg("sendto() failed");
 	}
 }

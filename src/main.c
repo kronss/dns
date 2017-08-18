@@ -1,24 +1,7 @@
 #include "dns_server.h"
 
-void				destruct(t_data *data)
+void				err_msg(char *line)
 {
-	t_host_name		*node;
-	t_host_name		*tmp;
-
-	node = data->head;
-	while (node != NULL)
-	{
-		tmp = node->next;
-		ft_strdel(&node->host_name);
-		ft_memdel((void **)&node);
-		node = tmp;
-	}
-	data->head = NULL;
-}
-
-void				err_msg(t_data *data, char *line)
-{
-	destruct(data);
 	perror(line);
 	exit(1);
 }
@@ -42,11 +25,11 @@ int					main(int argc, char **argv)
 
 	init_data(&data);
 	if ((fd = open(argv[1], O_RDONLY)) == -1)
-		err_msg(&data, argv[1]);
+		err_msg(argv[1]);
 
 	read_conf_file(&data, fd);
 
-	sockfd = create_server(&data);
+	sockfd = create_server();
 
 	catch_question(&data, sockfd);
 	return (0);
