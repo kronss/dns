@@ -36,6 +36,7 @@ void				catch_question(t_data *data, int sockfd)
 					err_msg(data, "sendto() failed");
 				}
 			}
+			destruct(data);
 			close(sockfd);
 			exit(0);
 		}
