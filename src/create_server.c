@@ -14,8 +14,8 @@ int						create_server(void)
 	server.sin_family = AF_INET;
 	server.sin_addr.s_addr = INADDR_ANY;
 
-	server.sin_port = htons(53); // std port
-	// server.sin_port = htons(5555);  // test port
+	// server.sin_port = htons(53); // std port
+	server.sin_port = htons(5555);  // test port
 
 	enable = 1;
 	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) == -1)
